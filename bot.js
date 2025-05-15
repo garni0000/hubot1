@@ -1,0 +1,128 @@
+require('dotenv').config();
+const { Telegraf, Markup } = require('telegraf');
+const schedule = require('node-schedule');
+const moment = require('moment');
+require('moment-timezone');
+
+// Configuration
+const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+const CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID;
+const ADMIN_ID = parseInt(process.env.TELEGRAM_ADMIN_ID);
+const TIMEZONE = process.env.TIMEZONE || 'Europe/Paris';
+
+moment.locale('fr');
+moment.tz.setDefault(TIMEZONE);
+
+// Heures d'envoi automatique (format 24h)
+const SCHEDULE_HOURS = [9, 12, 15, 17, 19, 21, 23];
+
+// Fonction pour calculer le temps restant
+function getNextPredictionTime() {
+    const now = moment();
+    let nextPrediction = null;
+
+    for (const hour of SCHEDULE_HOURS) {
+        const predictionTime = moment().hour(hour).minute(0).second(0);
+        if (predictionTime.isAfter(now)) {
+            nextPrediction = predictionTime;
+            break;
+        }
+    }
+
+    if (!nextPrediction) {
+        nextPrediction = moment().add(1, 'day').hour(SCHEDULE_HOURS[0]).minute(0).second(0);
+    }
+
+    const duration = moment.duration(nextPrediction.diff(now));
+    const hours = duration.hours();
+    const minutes = duration.minutes();
+
+    return hours > 0 
+        ? `dans ${hours}h${minutes > 0 ? ` et ${minutes}min` : ''}`
+        : `dans ${minutes}min`;
+}
+
+// Génère le message avec boutons inline
+function generatePrediction() {
+    const fixedCodes = ["1.23", "1.54", "1.93"];
+    const appleLines = fixedCodes.map(code => {
+        const applePos = Math.floor(Math.random() * 5);
+        return `${code}:${Array.from({length: 5}, (_, i) => i === applePos ? '🍎' : '🟩').join(' ')}`;
+    });
+
+    const keyboard = Markup.inlineKeyboard([
+        [
+            Markup.button.url('🔐 S\'inscrire ici', 'https://join.solkah.org/'),
+            Markup.button.url('📘 Comment jouer', 'https://t.me/hurusbot')
+        ]
+    ]);
+
+    return {
+        text: `🎯 Prévision du jour - Apple of Fortune
+🧠 Analyse terminée. Voici la prediction :
+
+📌 Position : 👇👇👇👇    
+${appleLines.join('\n')}
+📊 Tentative  :5  (nombre d\'essaie par signal)
+🎲 Prédiction : Probabilité de succès élevée mais attention :
+> cela fonctionne uniquement sur 1xcasino et linebet avec le code promo Free221
+
+🕐 Prochaine prévision ${getNextPredictionTime()}. Active les notifs !`,
+        reply_markup: keyboard.reply_markup
+    };
+}
+
+// Commande manuelle /send
+bot.command('send', (ctx) => {
+    if (ctx.from.id === ADMIN_ID) {
+        const { text, reply_markup } = generatePrediction();
+        bot.telegram.sendMessage(CHANNEL_ID, text, { 
+            parse_mode: 'Markdown',
+            reply_markup 
+        })
+        .then(() => ctx.reply('✅ Signal envoyé !'))
+        .catch((e) => {
+            console.error('Erreur d\'envoi:', e);
+            ctx.reply('❌ Erreur d\'envoi');
+        });
+    } else {
+        ctx.reply('⛔ Accès refusé');
+    }
+});
+
+// Envois automatiques
+SCHEDULE_HOURS.forEach(hour => {
+    schedule.scheduleJob(`0 ${hour} * * *`, () => {
+        const { text, reply_markup } = generatePrediction();
+        bot.telegram.sendMessage(CHANNEL_ID, text, {
+            parse_mode: 'Markdown',
+            reply_markup
+        }).catch(e => console.error(`Erreur à ${hour}h:`, e));
+    });
+    console.log(`✅ Prédiction programmée à ${hour}h`);
+});
+
+// Gestion des erreurs
+bot.catch((err, ctx) => {
+    console.error('Erreur du bot:', err);
+    ctx?.reply('❌ Une erreur est survenue');
+});
+
+// Démarrage
+bot.launch()
+    .then(() => console.log(`🤖 Bot démarré pour le canal ${CHANNEL_ID}`))
+    .catch(err => console.error('Échec du démarrage:', err));
+
+// Arrêt propre
+const shutdown = () => {
+    schedule.gracefulShutdown()
+        .then(() => bot.stop())
+        .then(() => process.exit(0))
+        .catch(err => {
+            console.error('Erreur lors de l\'arrêt:', err);
+            process.exit(1);
+        });
+};
+
+process.once('SIGINT', shutdown);
+process.once('SIGTERM', shutdown);
