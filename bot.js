@@ -1,4 +1,5 @@
 require('dotenv').config();
+const http = require('http');
 const { Telegraf, Markup } = require('telegraf');
 const schedule = require('node-schedule');
 const moment = require('moment');
@@ -126,3 +127,14 @@ const shutdown = () => {
 
 process.once('SIGINT', shutdown);
 process.once('SIGTERM', shutdown);
+
+
+
+
+// Serveur HTTP de statut (port 8080)
+http
+  .createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Bot en ligne');
+  })
+  .listen(8080, () => console.log('🌐 Serveur HTTP actif sur le port 8080'));
