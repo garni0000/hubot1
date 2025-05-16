@@ -54,7 +54,7 @@ function generatePrediction() {
     const keyboard = Markup.inlineKeyboard([
         [
             Markup.button.url('🔐 S\'inscrire ici', 'https://join.solkah.org/'),
-            Markup.button.url('📘 Comment jouer', 'https://t.me/hurusbot')
+            Markup.button.url('📘 Comment jouer', 'https://t.me/c/2687014032/31')
         ]
     ]);
 
