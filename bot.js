@@ -59,12 +59,14 @@ function generatePrediction() {
     ]);
 
     return {
-        text: `🎯 Prévision du jour - Apple of Fortune
-🧠 Analyse terminée. Voici la prediction :
+        text: `🎯 NEW SIGNAL - Apple of Fortune
 
-📌 Position : 👇👇👇👇    
+
+📌 Position : 👇👇👇👇 
+
 ${appleLines.join('\n')}
 📊 Tentative  :5  (nombre d\'essaie par signal)
+
 🎲 Prédiction : Probabilité de succès élevée mais attention :
 > cela fonctionne uniquement sur 1xcasino et linebet avec le code promo Free221
 
