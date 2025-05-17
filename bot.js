@@ -43,7 +43,7 @@ function getNextPredictionTime() {
         : `dans ${minutes}min`;
 }
 
-// Génère le message avec boutons inline
+// Génère le message avec boutons inline - version MarkdownV2
 function generatePrediction() {
     const fixedCodes = ["1.23", "1.54", "1.93"];
     const appleLines = fixedCodes.map(code => {
@@ -59,18 +59,19 @@ function generatePrediction() {
     ]);
 
     return {
-        text: `🎯 NEW SIGNAL - Apple of Fortune
+        text: `🎯 *NEW SIGNAL \\- Apple of Fortune*
+📊 *Tentative*  \\:5
 
+📌 *Position*  \\: 👇👇👇👇
 
-📌 Position : 👇👇👇👇 
+${appleLines.map(line => line.replace(/\./g, '\\.')).join('\n')}
 
-${appleLines.join('\n')}
-📊 Tentative  :5  (nombre d\'essaie par signal)
-
-🎲 Prédiction : Probabilité de succès élevée mais attention :
+🎲 *Prédiction*  \\: Probabilité de succès élevée mais attention :
 > cela fonctionne uniquement sur 1xcasino et linebet avec le code promo Free221
+```texte```
 
-🕐 Prochaine prévision ${getNextPredictionTime()}. Active les notifs !`,
+🕐 *Prochaine prévision* ${getNextPredictionTime()}\\. Active les notifs \\!`,
+        parse_mode: 'MarkdownV2',
         reply_markup: keyboard.reply_markup
     };
 }
