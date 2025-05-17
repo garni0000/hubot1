@@ -64,11 +64,11 @@ function generatePrediction() {
 
 📌 *Position*  \ : 👇👇👇👇
 
-${appleLines.map(line => line.replace(/\./g, '\\.')).join('\n')}
+${appleLines.map(line => line.replace(/\./g, '\.')).join('\n')}
 
 🎲 *Prédiction*  \: Probabilité de succès élevée mais attention :
-
-\`\`\`> cela fonctionne uniquement sur 1xcasino et linebet avec le code promo Free221\`\`\`\
+cela fonctionne uniquement sur
+\`\`\`  1xcasino et linebet avec le code promo *Free221*\`\`\`\
 
 🕐 *Prochaine prévision* ${getNextPredictionTime()}\. Active les notifs \!`,
         parse_mode: 'MarkdownV2',
