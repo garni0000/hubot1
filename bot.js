@@ -43,12 +43,14 @@ function getNextPredictionTime() {
         : `dans ${minutes}min`;
 }
 
-// Génère le message avec boutons inline - version MarkdownV2
 function generatePrediction() {
-    const fixedCodes = ["1.93", "1.54", "1.23", "2.41"];
+    const fixedCodes = ["2.41", "1.93", "1.54", "1.23"];
+
+    // Crée un objet avec les codes dans le bon ordre
     const appleLines = fixedCodes.map(code => {
         const applePos = Math.floor(Math.random() * 5);
-        return `${code}:${Array.from({length: 5}, (_, i) => i === applePos ? '🍎' : '🟩').join(' ')}`;
+        const line = Array.from({ length: 5 }, (_, i) => i === applePos ? '🍎' : '🟩').join(' ');
+        return `${code}:${line}`;
     });
 
     const keyboard = Markup.inlineKeyboard([
@@ -59,21 +61,22 @@ function generatePrediction() {
     ]);
 
     return {
-        text: `🎯 *NEW SIGNAL \ Apple of Fortune*
-📊 *Tentative*  \:5
+        text: `🎯 *NEW SIGNAL \\ Apple of Fortune*
+📊 *Tentative*  \\:5
 
-📌 *Position*  \ : 👇👇👇👇
+📌 *Position*  \\ : 👇👇👇👇
 
-${appleLines.map(line => line.replace(/\./g, '\.')).join('\n')}
+${appleLines.map(line => line.replace(/\./g, '\\.')).join('\n')}
 
-\`\`\` 🎲Mais attention :cela fonctionne uniquement sur 👇👇👇\`\`\`\
-\`\`\`  👉 Linebet et 888starz👈avec le code promo ZFree221 ✅ \`\`\`\
+\`\`\` 🎲Mais attention :cela fonctionne uniquement sur 👇👇👇\`\`\`
+\`\`\`  👉 Linebet et 888starz👈avec le code promo ZFree221 ✅ \`\`\`
 
-🕐 *Prochaine prévision* ${getNextPredictionTime()}\. Active les notifs \!`,
+🕐 *Prochaine prévision* ${getNextPredictionTime()}\\. Active les notifs !`,
         parse_mode: 'MarkdownV2',
         reply_markup: keyboard.reply_markup
     };
 }
+
 
 // Commande manuelle /send
 bot.command('send', (ctx) => {
