@@ -45,7 +45,7 @@ function getNextPredictionTime() {
 
 // Génère le message avec boutons inline - version MarkdownV2
 function generatePrediction() {
-    const fixedCodes = ["1.23", "1.54", "1.93"];
+    const fixedCodes = ["1.93", "1.54", "1.23", "2.41"];
     const appleLines = fixedCodes.map(code => {
         const applePos = Math.floor(Math.random() * 5);
         return `${code}:${Array.from({length: 5}, (_, i) => i === applePos ? '🍎' : '🟩').join(' ')}`;
@@ -54,7 +54,7 @@ function generatePrediction() {
     const keyboard = Markup.inlineKeyboard([
         [
             Markup.button.url('🔐 S\'inscrire ici', 'https://join.solkah.org/'),
-            Markup.button.url('📘 Comment jouer', 'https://t.me/c/2687014032/31')
+            Markup.button.url('📘 Comment jouer', 'https://t.me/c/2035790146/11014')
         ]
     ]);
 
@@ -67,7 +67,7 @@ function generatePrediction() {
 ${appleLines.map(line => line.replace(/\./g, '\.')).join('\n')}
 
 \`\`\` 🎲Mais attention :cela fonctionne uniquement sur 👇👇👇\`\`\`\
-\`\`\`  👉 1xcasino et linebet 👈avec le code promo Free221 ✅ \`\`\`\
+\`\`\`  👉 Linebet et 888starz👈avec le code promo ZFree221 ✅ \`\`\`\
 
 🕐 *Prochaine prévision* ${getNextPredictionTime()}\. Active les notifs \!`,
         parse_mode: 'MarkdownV2',
