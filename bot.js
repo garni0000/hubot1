@@ -61,12 +61,12 @@ function generatePrediction() {
     ]);
 
     return {
-        text: `🎯 *NEW SIGNAL \\ Apple of Fortune*
-📊 *Tentative*  \\:5
+        text: `🎯 *NEW SIGNAL \ Apple of Fortune*
+📊 *Tentative*  \:5
 
-📌 *Position*  \\ : 👇👇👇👇
+📌 *Position*  \ : 👇👇👇👇
 
-${appleLines.map(line => line.replace(/\./g, '\\.')).join('\n')}
+${appleLines.map(line => line.replace(/\./g, '\.')).join('\n')}
 
 \`\`\` 🎲Mais attention :cela fonctionne uniquement sur 👇👇👇\`\`\`
 \`\`\`  👉 Linebet et 888starz👈avec le code promo ZFree221 ✅ \`\`\`
